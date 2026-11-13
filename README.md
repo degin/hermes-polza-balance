@@ -18,7 +18,7 @@ Polza работает как роутер: запросы к моделям с�
 
 ## Установка
 
-Нужен Hermes Desktop и ключ Polza в `.env` профиля.
+Нужен Hermes Desktop и API-ключ Polza.ai.
 
 ```bash
 hermes plugins install degin/hermes-polza-balance --enable
@@ -31,16 +31,15 @@ hermes plugins install degin/hermes-polza-balance --enable
 
 Если чип не появился: `Ctrl+K` → «Reload desktop plugins», затем перезапусти gateway.
 
-## Где плагин ищет ключ
+## Ключ
 
-Переменные окружения и `.env` в `HERMES_HOME`, по порядку:
+Плагин объявляет `requires_env: POLZA_API_KEY` и читает ключ через `agent.secret_scope.get_secret`, то есть по правилам Hermes для секретов (учитывает активный профиль). При установке Hermes спросит ключ. Можно добавить строку `POLZA_API_KEY=...` в `.env` профиля. Ключ берётся в личном кабинете Polza.ai.
 
-1. имя из `POLZA_BALANCE_KEY_ENV`, если ты его задал;
-2. `POLZA_API_KEY`;
-3. `POLZA_AI_API_KEY`;
-4. `HERMES_CUSTOM_POLZA_API_KEY`.
+## Что делает плагин с сетью и данными
 
-Ключ лежит в переменной с другим именем: добавь в `.env` строку `POLZA_BALANCE_KEY_ENV=ИМЯ_ТВОЕЙ_ПЕРЕМЕННОЙ`.
+- Один запрос `GET https://polza.ai/api/v2/balance` с заголовком `Authorization: Bearer <ключ>`, не чаще раза в минуту.
+- Читает только `POLZA_API_KEY` через Hermes. Файлов `.env` и других хранилищ не открывает, ничего не записывает на диск.
+- Нет фоновых процессов, телеметрии, shell-команд и самообновления.
 
 ## Настройка порогов
 

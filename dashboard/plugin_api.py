@@ -1,27 +1,21 @@
-"""Баланс Polza.ai для статус-бара. Вер. 1.
+"""Баланс Polza.ai для статус-бара. Вер. 1.1.
 
 GET /api/plugins/polza-balance/balance[?refresh=1] -> {amount, available, reserved, updated_at}
-Ключ ищется в env и в .env из HERMES_HOME под одним из имён KEY_ENVS и наружу не отдаётся.
+Ключ POLZA_API_KEY читается через agent.secret_scope.get_secret и наружу не отдаётся.
 """
 
 import json
-import os
 import threading
 import time
 import urllib.error
 import urllib.request
-from pathlib import Path
 
+from agent.secret_scope import get_secret
 from fastapi import APIRouter
 
 router = APIRouter()
 
-KEY_ENVS = tuple(n for n in (
-    os.environ.get("POLZA_BALANCE_KEY_ENV", "").strip(),
-    "POLZA_API_KEY",
-    "POLZA_AI_API_KEY",
-    "HERMES_CUSTOM_POLZA_API_KEY",
-) if n)
+KEY_ENV = "POLZA_API_KEY"
 URL = "https://polza.ai/api/v2/balance"
 CACHE_TTL = 60
 
@@ -30,24 +24,7 @@ _cache = {"ts": 0.0, "data": None}
 
 
 def _api_key() -> str:
-    for name in KEY_ENVS:
-        key = os.environ.get(name, "").strip()
-        if key:
-            return key
-    home = Path(os.environ.get("HERMES_HOME") or Path.home() / ".hermes")
-    try:
-        lines = (home / ".env").read_text(encoding="utf-8-sig").splitlines()
-    except OSError:
-        return ""
-    values = {}
-    for line in lines:
-        name, sep, value = line.partition("=")
-        if sep:
-            values[name.strip()] = value.strip().strip("'\"")
-    for name in KEY_ENVS:
-        if values.get(name):
-            return values[name]
-    return ""
+    return (get_secret(KEY_ENV, "") or "").strip()
 
 
 def _num(value):

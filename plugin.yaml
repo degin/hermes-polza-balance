@@ -1,11 +1,17 @@
 name: polza-balance
 label: Polza balance
 kind: standalone
-version: 1.0.0
+version: 1.1.0
 description: >
   Polza.ai balance chip in the Hermes desktop status bar; turns red as it nears 100 RUB.
   Баланс Polza.ai в статус-баре, краснеет при приближении к 100 ₽.
 author: degin
 license: MIT
+requires_hermes: ">=0.22.5"
+requires_env:
+  - name: POLZA_API_KEY
+    description: "Polza.ai API key (used only to read the account balance)"
+    url: "https://polza.ai"
+    secret: true
 provides_tools: []
 provides_hooks: []
