@@ -2,6 +2,8 @@
 
 Баланс [Polza.ai](https://polza.ai) в статус-баре десктопного Hermes Agent. Чип `Polza 888 ₽` справа внизу, цвет меняется от нейтрального к красному по мере того, как деньги заканчиваются.
 
+![Чип Polza в статус-баре](screenshots/status-bar.png)
+
 *English: a Hermes Desktop status-bar chip that shows your Polza.ai balance and turns red as it approaches 100 RUB.*
 
 ## Зачем
