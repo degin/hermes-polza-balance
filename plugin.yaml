@@ -1,0 +1,11 @@
+name: polza-balance
+label: Polza balance
+kind: standalone
+version: 1.0.0
+description: >
+  Polza.ai balance chip in the Hermes desktop status bar; turns red as it nears 100 RUB.
+  Баланс Polza.ai в статус-баре, краснеет при приближении к 100 ₽.
+author: degin
+license: MIT
+provides_tools: []
+provides_hooks: []
